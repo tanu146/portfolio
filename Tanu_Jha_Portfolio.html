@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanu Jha — Flutter Developer</title>
+<meta name="description" content="Tanu Jha — Flutter Developer. 2 years shipping production Android & iOS apps, live on the Play Store.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0E14;
+    --panel:#12161F;
+    --panel-2:#171C27;
+    --line:#242B3A;
+    --paper:#EDEDF2;
+    --muted:#8A8FA3;
+    --blue:#4C7EFF;
+    --blue-soft:rgba(76,126,255,.14);
+    --mint:#34D9A0;
+    --mint-soft:rgba(52,217,160,.14);
+    --amber:#FFB648;
+    --amber-soft:rgba(255,182,72,.14);
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+    --maxw:1180px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 800px 500px at 85% -10%, rgba(76,126,255,.16), transparent 60%),
+      radial-gradient(ellipse 700px 500px at -10% 20%, rgba(52,217,160,.08), transparent 60%);
+    background-attachment:fixed;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+  section{position:relative; padding:120px 24px;}
+  .wrap{max-width:var(--maxw); margin:0 auto;}
+
+  ::selection{background:var(--blue); color:#fff;}
+
+  /* ---------- scrollbar ---------- */
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--ink);}
+  ::-webkit-scrollbar-thumb{background:var(--line); border-radius:10px;}
+
+  /* ---------- reveal-on-scroll ---------- */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1);}
+  .reveal.is-visible{opacity:1; transform:translateY(0);}
+  .reveal-stagger > *{opacity:0; transform:translateY(24px); transition:opacity .6s cubic-bezier(.16,.84,.44,1), transform .6s cubic-bezier(.16,.84,.44,1);}
+  .reveal-stagger.is-visible > *{opacity:1; transform:translateY(0);}
+  .reveal-stagger.is-visible > *:nth-child(1){transition-delay:.03s;}
+  .reveal-stagger.is-visible > *:nth-child(2){transition-delay:.11s;}
+  .reveal-stagger.is-visible > *:nth-child(3){transition-delay:.19s;}
+  .reveal-stagger.is-visible > *:nth-child(4){transition-delay:.27s;}
+  .reveal-stagger.is-visible > *:nth-child(5){transition-delay:.35s;}
+  .reveal-stagger.is-visible > *:nth-child(6){transition-delay:.43s;}
+
+  /* ================= NAV ================= */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    backdrop-filter:blur(14px);
+    background:rgba(11,14,20,.72);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, background .3s ease;
+  }
+  .nav.scrolled{border-bottom-color:var(--line);}
+  .nav-logo{font-family:var(--font-display); font-weight:700; font-size:19px; letter-spacing:.02em;}
+  .nav-logo span{color:var(--blue);}
+  .nav-links{display:flex; gap:34px; align-items:center;}
+  .nav-links a{font-family:var(--font-mono); font-size:13px; color:var(--muted); position:relative; transition:color .25s ease;}
+  .nav-links a::after{content:''; position:absolute; left:0; bottom:-6px; width:0; height:1px; background:var(--blue); transition:width .25s ease;}
+  .nav-links a:hover{color:var(--paper);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    font-family:var(--font-mono); font-size:13px; padding:9px 18px; border-radius:100px;
+    border:1px solid var(--blue); color:var(--blue); transition:all .25s ease;
+  }
+  .nav-cta:hover{background:var(--blue); color:#fff; box-shadow:0 0 24px rgba(76,126,255,.5);}
+  .nav-toggle{display:none;}
+
+  @media (max-width:820px){
+    .nav-links{
+      position:fixed; top:64px; left:0; right:0; bottom:0;
+      background:var(--ink); flex-direction:column; justify-content:flex-start;
+      padding:40px 32px; gap:26px; transform:translateX(100%); transition:transform .35s ease;
+    }
+    .nav-links.open{transform:translateX(0);}
+    .nav-links a{font-size:18px;}
+    .nav-toggle{
+      display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; z-index:101; padding:6px;
+    }
+    .nav-toggle span{width:22px; height:2px; background:var(--paper); transition:all .3s ease;}
+    .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .nav-toggle.open span:nth-child(2){opacity:0;}
+    .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  }
+
+  /* ================= HERO ================= */
+  .hero{
+    min-height:100vh; display:flex; align-items:center;
+    padding:140px 24px 80px;
+  }
+  .hero-grid{
+    max-width:var(--maxw); margin:0 auto; width:100%;
+    display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:12.5px; color:var(--mint);
+    background:var(--mint-soft); border:1px solid rgba(52,217,160,.3);
+    padding:7px 14px; border-radius:100px; margin-bottom:24px;
+  }
+  .eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--mint); box-shadow:0 0 8px var(--mint); animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.35;}}
+
+  .hero h1{
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(38px, 5.2vw, 66px); line-height:1.04; letter-spacing:-.02em;
+    margin-bottom:22px;
+  }
+  .hero h1 .accent{color:var(--blue);}
+  .hero h1 .accent2{color:var(--mint);}
+  .hero p.lede{
+    font-size:18px; color:var(--muted); max-width:520px; margin-bottom:38px;
+  }
+  .hero p.lede b{color:var(--paper); font-weight:600;}
+
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:56px;}
+  .btn{
+    font-family:var(--font-mono); font-size:13.5px; padding:13px 24px; border-radius:10px;
+    display:inline-flex; align-items:center; gap:8px; transition:all .25s cubic-bezier(.16,.84,.44,1);
+  }
+  .btn-primary{background:var(--blue); color:#fff; box-shadow:0 8px 24px rgba(76,126,255,.28);}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 12px 30px rgba(76,126,255,.42);}
+  .btn-ghost{border:1px solid var(--line); color:var(--paper);}
+  .btn-ghost:hover{border-color:var(--muted); transform:translateY(-2px);}
+
+  .hero-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--line); padding-top:28px; max-width:520px;}
+  .stat{padding-right:16px;}
+  .stat .num{font-family:var(--font-mono); font-size:26px; font-weight:500; color:var(--paper); display:flex; align-items:baseline; gap:2px;}
+  .stat .num .plus{color:var(--blue); font-size:18px;}
+  .stat .label{font-size:12px; color:var(--muted); margin-top:4px; letter-spacing:.01em;}
+
+  /* ---- phone mockup (signature element) ---- */
+  .phone-stage{display:flex; justify-content:center; align-items:center; position:relative; perspective:1400px;}
+  .phone-glow{
+    position:absolute; width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle, rgba(76,126,255,.35), transparent 70%);
+    filter:blur(30px); z-index:0; animation:float 6s ease-in-out infinite;
+  }
+  @keyframes float{0%,100%{transform:translateY(0);} 50%{transform:translateY(-16px);}}
+
+  .phone{
+    position:relative; z-index:1; width:270px; height:552px;
+    background:#05070c; border-radius:42px; padding:12px;
+    border:1px solid #2a3142;
+    box-shadow:0 30px 60px -12px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.03) inset;
+    animation:floatPhone 5s ease-in-out infinite;
+  }
+  @keyframes floatPhone{0%,100%{transform:translateY(0) rotate(-1.2deg);} 50%{transform:translateY(-14px) rotate(1.2deg);}}
+  .phone-notch{
+    position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    width:90px; height:22px; background:#05070c; border-radius:0 0 16px 16px; z-index:5;
+  }
+  .phone-screen{
+    position:relative; width:100%; height:100%; border-radius:32px; overflow:hidden;
+    background:linear-gradient(160deg, #10141d, #0a0d13);
+  }
+  .app-slide{
+    position:absolute; inset:0; padding:34px 18px 18px;
+    display:flex; flex-direction:column;
+    opacity:0; transform:translateX(24px); transition:opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+  }
+  .app-slide.active{opacity:1; transform:translateX(0); pointer-events:auto;}
+  .app-slide .status{display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:10px; color:var(--muted); margin-bottom:22px;}
+  .app-icon-big{
+    width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:700; font-size:20px; color:#05070c; margin-bottom:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+  }
+  .app-slide h4{font-family:var(--font-display); font-size:19px; margin-bottom:4px;}
+  .app-slide .tag{font-size:12.5px; color:var(--muted); margin-bottom:18px;}
+  .app-slide .bars{display:flex; gap:5px; align-items:flex-end; height:64px; margin-bottom:18px;}
+  .app-slide .bars i{flex:1; border-radius:4px 4px 0 0; opacity:.85;}
+  .app-chip-row{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:auto;}
+  .app-chip{font-family:var(--font-mono); font-size:9.5px; padding:4px 8px; border-radius:100px; border:1px solid var(--line); color:var(--muted);}
+  .app-slide .metrics{display:flex; justify-content:space-between; border-top:1px solid var(--line); padding-top:12px; margin-top:12px;}
+  .app-slide .metrics div{font-family:var(--font-mono);}
+  .app-slide .metrics .v{font-size:15px; color:var(--paper);}
+  .app-slide .metrics .k{font-size:9.5px; color:var(--muted);}
+
+  .phone-dots{display:flex; gap:8px; justify-content:center; margin-top:22px;}
+  .phone-dots button{
+    width:22px; height:4px; border-radius:4px; border:none; background:var(--line); cursor:pointer; transition:all .3s ease; padding:0;
+  }
+  .phone-dots button.active{background:var(--blue); width:34px;}
+
+  @media (max-width:940px){
+    .hero-grid{grid-template-columns:1fr; text-align:left;}
+    .phone-stage{margin-top:20px;}
+  }
+
+  /* ================= SECTION HEADERS ================= */
+  .sec-head{margin-bottom:56px; max-width:640px;}
+  .sec-eyebrow{font-family:var(--font-mono); font-size:12.5px; color:var(--blue); letter-spacing:.08em; text-transform:uppercase; margin-bottom:14px; display:block;}
+  .sec-head h2{font-family:var(--font-display); font-weight:700; font-size:clamp(28px,3.4vw,42px); letter-spacing:-.01em; margin-bottom:14px;}
+  .sec-head p{color:var(--muted); font-size:16px;}
+
+  /* ================= ABOUT ================= */
+  .about-grid{display:grid; grid-template-columns:1.3fr .7fr; gap:60px;}
+  .about-grid p{color:var(--muted); font-size:16.5px; margin-bottom:18px;}
+  .about-grid p b{color:var(--paper); font-weight:600;}
+  .about-side{display:flex; flex-direction:column; gap:16px;}
+  .info-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px;}
+  .info-card .k{font-family:var(--font-mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px;}
+  .info-card .v{font-size:15px;}
+  .info-card .v a:hover{color:var(--blue);}
+
+  /* ================= APPS (signature showcase) ================= */
+  .apps-section{background:var(--panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .app-cards{display:grid; grid-template-columns:repeat(2,1fr); gap:26px;}
+  .app-card{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:20px; padding:30px;
+    transition:transform .35s cubic-bezier(.16,.84,.44,1), border-color .35s ease, box-shadow .35s ease;
+    position:relative; overflow:hidden;
+  }
+  .app-card::before{
+    content:''; position:absolute; inset:0; opacity:0; transition:opacity .35s ease;
+    background:radial-gradient(500px 200px at 0% 0%, var(--card-glow, rgba(76,126,255,.12)), transparent 70%);
+  }
+  .app-card:hover{transform:translateY(-6px); border-color:var(--card-accent, var(--blue));}
+  .app-card:hover::before{opacity:1;}
+  .app-card-top{display:flex; align-items:center; gap:16px; margin-bottom:20px; position:relative;}
+  .app-card-icon{
+    width:58px; height:58px; border-radius:16px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:700; font-size:21px; color:#05070c;
+  }
+  .app-card h3{font-family:var(--font-display); font-size:21px; margin-bottom:3px;}
+  .app-card .platform{font-family:var(--font-mono); font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px;}
+  .app-card .desc{color:var(--muted); font-size:14.5px; margin-bottom:18px; position:relative;}
+  .app-card .chips{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:22px; position:relative;}
+  .app-card .chips span{font-family:var(--font-mono); font-size:11px; padding:5px 10px; border-radius:100px; background:var(--ink); border:1px solid var(--line); color:var(--muted);}
+  .app-card-foot{display:flex; align-items:center; justify-content:space-between; position:relative;}
+  .app-card-stat{font-family:var(--font-mono);}
+  .app-card-stat .v{font-size:20px; color:var(--paper); font-weight:500;}
+  .app-card-stat .k{font-size:10.5px; color:var(--muted);}
+  .app-card-link{
+    font-family:var(--font-mono); font-size:12.5px; display:flex; align-items:center; gap:6px;
+    padding:10px 16px; border-radius:100px; border:1px solid var(--line); transition:all .25s ease;
+  }
+  .app-card-link:hover{border-color:var(--card-accent, var(--blue)); color:var(--card-accent, var(--blue)); gap:9px;}
+
+  .apps-note{
+    margin-top:28px; font-family:var(--font-mono); font-size:12.5px; color:var(--muted);
+    border:1px dashed var(--line); border-radius:12px; padding:14px 18px;
+  }
+  .apps-note b{color:var(--amber);}
+
+  @media (max-width:760px){.app-cards{grid-template-columns:1fr;} .about-grid{grid-template-columns:1fr;}}
+
+  /* ================= EXPERIENCE (timeline) ================= */
+  .timeline{position:relative; padding-left:36px;}
+  .timeline::before{content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:var(--line);}
+  .t-item{position:relative; padding-bottom:52px;}
+  .t-item:last-child{padding-bottom:0;}
+  .t-dot{position:absolute; left:-36px; top:4px; width:13px; height:13px; border-radius:50%; background:var(--ink); border:2px solid var(--blue); box-shadow:0 0 0 4px var(--blue-soft);}
+  .t-item.current .t-dot{background:var(--mint); border-color:var(--mint); box-shadow:0 0 0 4px var(--mint-soft);}
+  .t-date{font-family:var(--font-mono); font-size:12px; color:var(--muted); margin-bottom:8px; display:flex; align-items:center; gap:10px;}
+  .t-date .live{font-size:10px; color:var(--mint); border:1px solid rgba(52,217,160,.4); padding:2px 8px; border-radius:100px; background:var(--mint-soft);}
+  .t-item h3{font-family:var(--font-display); font-size:21px; margin-bottom:3px;}
+  .t-item .org{color:var(--blue); font-size:14.5px; margin-bottom:14px; font-weight:500;}
+  .t-item ul{display:flex; flex-direction:column; gap:9px;}
+  .t-item li{position:relative; padding-left:18px; color:var(--muted); font-size:15px;}
+  .t-item li::before{content:''; position:absolute; left:0; top:9px; width:5px; height:5px; border-radius:50%; background:var(--line);}
+
+  /* ================= SKILLS ================= */
+  .skills-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  .skill-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:24px;}
+  .skill-card h4{font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); margin-bottom:16px;}
+  .skill-tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .skill-tags span{
+    font-size:13.5px; padding:7px 13px; border-radius:9px; background:var(--panel-2); border:1px solid var(--line);
+    transition:all .25s ease; cursor:default;
+  }
+  .skill-tags span:hover{border-color:var(--blue); color:var(--blue); transform:translateY(-2px);}
+  @media (max-width:900px){.skills-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:600px){.skills-grid{grid-template-columns:1fr;}}
+
+  /* ================= PROJECTS (non play-store) ================= */
+  .proj-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  .proj-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:26px; transition:transform .3s ease, border-color .3s ease;}
+  .proj-card:hover{transform:translateY(-5px); border-color:var(--amber);}
+  .proj-icon{width:42px; height:42px; border-radius:10px; background:var(--amber-soft); border:1px solid rgba(255,182,72,.35); display:flex; align-items:center; justify-content:center; margin-bottom:16px; color:var(--amber);}
+  .proj-card h3{font-family:var(--font-display); font-size:18px; margin-bottom:8px;}
+  .proj-card p{color:var(--muted); font-size:14px; margin-bottom:14px;}
+  .proj-metric{font-family:var(--font-mono); font-size:12px; color:var(--mint); border-top:1px solid var(--line); padding-top:12px;}
+  @media (max-width:900px){.proj-grid{grid-template-columns:1fr;}}
+
+  /* ================= ACHIEVEMENTS ================= */
+  .ach-list{display:flex; flex-direction:column; gap:1px; background:var(--line); border-radius:16px; overflow:hidden; border:1px solid var(--line);}
+  .ach-item{background:var(--panel); padding:24px 28px; display:flex; align-items:center; gap:20px; transition:background .25s ease;}
+  .ach-item:hover{background:var(--panel-2);}
+  .ach-badge{
+    font-family:var(--font-mono); font-size:11px; color:var(--amber); background:var(--amber-soft);
+    border:1px solid rgba(255,182,72,.35); padding:8px 12px; border-radius:10px; flex-shrink:0; min-width:96px; text-align:center;
+  }
+  .ach-item h4{font-size:16px; margin-bottom:3px;}
+  .ach-item p{color:var(--muted); font-size:13.5px;}
+  @media (max-width:640px){.ach-item{flex-direction:column; align-items:flex-start; gap:10px;}}
+
+  /* ================= EDUCATION ================= */
+  .edu-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .edu-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:28px;}
+  .edu-card .deg{font-family:var(--font-display); font-size:19px; margin-bottom:6px;}
+  .edu-card .inst{color:var(--blue); font-size:14px; margin-bottom:16px;}
+  .edu-card .meta{display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:14px; font-family:var(--font-mono); font-size:12.5px; color:var(--muted);}
+  .edu-card .meta .score{color:var(--mint); font-size:16px;}
+  @media (max-width:700px){.edu-grid{grid-template-columns:1fr;}}
+
+  /* ================= CONTACT / FOOTER ================= */
+  .contact-section{text-align:center;}
+  .contact-section h2{font-family:var(--font-display); font-size:clamp(30px,5vw,52px); font-weight:700; margin-bottom:18px; letter-spacing:-.01em;}
+  .contact-section p{color:var(--muted); font-size:17px; max-width:480px; margin:0 auto 36px;}
+  .contact-links{display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:70px;}
+  .contact-links a{
+    display:flex; align-items:center; gap:9px; font-family:var(--font-mono); font-size:13.5px;
+    padding:13px 22px; border-radius:100px; border:1px solid var(--line); transition:all .25s ease;
+  }
+  .contact-links a:hover{border-color:var(--blue); color:var(--blue); transform:translateY(-3px);}
+  .contact-links svg{width:16px; height:16px;}
+
+  footer{border-top:1px solid var(--line); padding:28px 24px; display:flex; justify-content:space-between; align-items:center; max-width:var(--maxw); margin:0 auto; flex-wrap:wrap; gap:12px;}
+  footer p{font-family:var(--font-mono); font-size:12px; color:var(--muted);}
+
+  /* back to top */
+  .totop{
+    position:fixed; bottom:28px; right:28px; width:44px; height:44px; border-radius:50%;
+    background:var(--panel); border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; opacity:0; pointer-events:none; transform:translateY(10px); transition:all .3s ease; z-index:90;
+  }
+  .totop.show{opacity:1; pointer-events:auto; transform:translateY(0);}
+  .totop:hover{border-color:var(--blue); color:var(--blue);}
+
+  @media (max-width:640px){
+    section{padding:80px 20px;}
+    .hero{padding-top:120px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="nav" id="nav">
+  <a href="#top" class="nav-logo">Tanu<span>.</span>Jha</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#apps">Apps</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact" class="nav-cta">Get in touch</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow reveal"><span class="dot"></span>Open to Flutter / Mobile Developer roles</span>
+      <h1 class="reveal">I build mobile apps that <span class="accent">ship</span>, <span class="accent2">scale</span> and <span class="accent">make money.</span></h1>
+      <p class="lede reveal">Flutter Developer with <b>2 years</b> of production experience — I've taken <b>5+ apps</b> from first commit to Play Store release, wiring up Firebase, monetization SDKs, and the analytics that tell you if any of it worked.</p>
+      <div class="hero-ctas reveal">
+        <a href="#apps" class="btn btn-primary">See live apps ↓</a>
+        <a href="Tanu_Jha_Resume.docx" class="btn btn-ghost" download>Download résumé</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div class="stat">
+          <div class="num" data-count="10000" data-suffix="+">0</div>
+          <div class="label">Combined downloads</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-count="5" data-suffix="+">0</div>
+          <div class="label">Apps shipped end-to-end</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-count="2" data-suffix=" live">0</div>
+          <div class="label">On the Play Store now</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone-stage">
+      <div class="phone-glow"></div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" id="phoneScreen"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <span class="sec-eyebrow">01 — About</span>
+      <h2 style="font-family:var(--font-display); font-size:clamp(26px,3vw,36px); margin-bottom:24px; letter-spacing:-.01em;">Grounded in AI &amp; ML, specialized in shipping Flutter.</h2>
+      <p>I started with a <b>B.Tech in Artificial Intelligence &amp; Machine Learning</b> (9.10 CGPA), which is still how I think about products — instrument everything, and let the data tell you what to build next. That mindset is what pulled me toward mobile monetization: it's one of the few parts of app development where the feedback loop from code to revenue is almost immediate.</p>
+      <p>Since then I've spent two years as a <b>Flutter Developer</b>, currently working as a <b>Full Stack Application Developer</b> at Codewright Marketing Solutions, where I own applications end-to-end — architecture, Firebase backend, third-party SDK integration, and the Play Console release itself. Two of my own apps are live on the Play Store today, monetized with AdMob Mediation and Unity LevelPlay.</p>
+      <p>Off the clock, I've picked up wins at three hackathons, including <b>Best WIE Team</b> at IEEE DTU's Vihaan 6.0.</p>
+    </div>
+    <div class="about-side reveal">
+      <div class="info-card">
+        <div class="k">Currently</div>
+        <div class="v">Full Stack Application Developer @ Codewright Marketing Solutions</div>
+      </div>
+      <div class="info-card">
+        <div class="k">Based in</div>
+        <div class="v">New Delhi, India</div>
+      </div>
+      <div class="info-card">
+        <div class="k">Core stack</div>
+        <div class="v">Flutter · Dart · Firebase · GetX / Provider</div>
+      </div>
+      <div class="info-card">
+        <div class="k">Niche</div>
+        <div class="v">AdMob Mediation · Unity LevelPlay · Play Billing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= APPS (signature: live on Play Store) ================= -->
+<section id="apps" class="apps-section">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">02 — On the Play Store</span>
+      <h2>Apps real people installed.</h2>
+      <p>Every card below is a shipped, monetized, published product — not a demo. Tap through on the phone mockup above to see them the way a player does.</p>
+    </div>
+    <div class="app-cards reveal-stagger" id="appCards"><!-- injected by script --></div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">03 — Experience</span>
+      <h2>Two years, one straight line up.</h2>
+    </div>
+    <div class="timeline reveal-stagger">
+      <div class="t-item current">
+        <div class="t-dot"></div>
+        <div class="t-date">Mar 2025 — Present <span class="live">current</span></div>
+        <h3>Flutter Developer → Full Stack Application Developer</h3>
+        <div class="org">Codewright Marketing Solutions</div>
+        <ul>
+          <li>Own the full lifecycle — development through Play Store release — for 5+ Flutter applications, including SDK integration, testing, and maintenance.</li>
+          <li>Integrate mobile monetization, in-app purchases, and subscriptions via Google Play Console and Play Billing.</li>
+          <li>Design scalable app architecture using GetX and Provider for state management.</li>
+          <li>Improve stability and performance through debugging, profiling, and crash resolution.</li>
+        </ul>
+      </div>
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-date">Apr 2024 — Mar 2025</div>
+        <h3>Flutter Developer Intern → Flutter Developer</h3>
+        <div class="org">Wayug Infotech Solutions Pvt Ltd</div>
+        <ul>
+          <li>Built and maintained mobile apps in Flutter with REST API integration.</li>
+          <li>Implemented Firebase Authentication and real-time database handling.</li>
+          <li>Partnered with cross-functional teams to improve UI/UX, lifting user retention by 20%.</li>
+        </ul>
+      </div>
+      <div class="t-item">
+        <div class="t-dot"></div>
+        <div class="t-date">Aug 2023 — Sep 2023</div>
+        <h3>Machine Learning Intern</h3>
+        <div class="org">CodSoft</div>
+        <ul>
+          <li>Built ML models for spam detection, fraud detection, and churn prediction — 90%+ accuracy.</li>
+          <li>Optimized model performance, cutting processing time by 30%.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">04 — Toolkit</span>
+      <h2>What's under the hood.</h2>
+    </div>
+    <div class="skills-grid reveal-stagger">
+      <div class="skill-card">
+        <h4>Languages</h4>
+        <div class="skill-tags"><span>Dart</span><span>Java</span><span>Python</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Mobile Development</h4>
+        <div class="skill-tags"><span>Flutter</span><span>Android SDK</span><span>GetX</span><span>Provider</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Backend &amp; Cloud</h4>
+        <div class="skill-tags"><span>Firebase Auth</span><span>Firestore</span><span>Realtime DB</span><span>REST APIs</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Monetization &amp; Ads</h4>
+        <div class="skill-tags"><span>Google AdMob</span><span>AdMob Mediation</span><span>Unity LevelPlay</span><span>Play Billing</span><span>Waterfall Strategy</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Analytics</h4>
+        <div class="skill-tags"><span>Firebase Analytics</span><span>User Behavior Tracking</span><span>Revenue Monitoring</span></div>
+      </div>
+      <div class="skill-card">
+        <h4>Tools &amp; Platforms</h4>
+        <div class="skill-tags"><span>Git</span><span>GitHub</span><span>Android Studio</span><span>Postman</span><span>Play Console</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OTHER PROJECTS ================= -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">05 — Beyond the Play Store</span>
+      <h2>Where the ML degree shows up.</h2>
+    </div>
+    <div class="proj-grid reveal-stagger">
+      <div class="proj-card">
+        <div class="proj-icon">✋</div>
+        <h3>SIGN IT UP</h3>
+        <p>An ML-powered solution assisting hearing-impaired communication, built for real-time use.</p>
+        <div class="proj-metric">~85% accuracy · &lt;200ms latency</div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-icon">🕹️</div>
+        <h3>Reflex Builder</h3>
+        <p>Real-time reaction-based game — see the full write-up in the Apps section above.</p>
+        <div class="proj-metric">10,000+ downloads</div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-icon">🎯</div>
+        <h3>Tap Until Regret</h3>
+        <p>Precision-based game with real-time feedback — full backend built solo.</p>
+        <div class="proj-metric">Live on Play Store</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACHIEVEMENTS ================= -->
+<section id="achievements">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">06 — Achievements</span>
+      <h2>Hackathon record.</h2>
+    </div>
+    <div class="ach-list reveal-stagger">
+      <div class="ach-item">
+        <div class="ach-badge">WINNER</div>
+        <div>
+          <h4>Best WIE (Women In Engineering) Team</h4>
+          <p>Vihaan 6.0 — DTU Hackathon, organized by IEEE DTU</p>
+        </div>
+      </div>
+      <div class="ach-item">
+        <div class="ach-badge">TOP 15</div>
+        <div>
+          <h4>Top 15 Teams</h4>
+          <p>Hack Unicorn Hackathon, organized by GDSC, GTBIT</p>
+        </div>
+      </div>
+      <div class="ach-item">
+        <div class="ach-badge">WINNER</div>
+        <div>
+          <h4>Social Cause Track</h4>
+          <p>Lean In Hacks 5.0 — IGDTUW Hackathon, held at Microsoft Office, Noida</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EDUCATION ================= -->
+<section id="education">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-eyebrow">07 — Education</span>
+      <h2>Where it started.</h2>
+    </div>
+    <div class="edu-grid reveal-stagger">
+      <div class="edu-card">
+        <div class="deg">B.Tech, Artificial Intelligence &amp; Machine Learning</div>
+        <div class="inst">Guru Tegh Bahadur Institute of Technology, GGSIPU</div>
+        <div class="meta"><span>2021 – 2025 · Delhi, India</span><span class="score">9.10 CGPA</span></div>
+      </div>
+      <div class="edu-card">
+        <div class="deg">Central Board of Secondary Education</div>
+        <div class="inst">MR Vivekananda Model School</div>
+        <div class="meta"><span>Class 10th (2019) · Class 12th (2021)</span><span class="score">91% / 86%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="contact-section">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="sec-eyebrow">08 — Get in touch</span>
+      <h2>Let's ship your next app.</h2>
+      <p>Open to Flutter Developer and Full Stack roles across startups, scale-ups, and product teams. Fastest way to reach me is email or LinkedIn.</p>
+      <div class="contact-links">
+        <a href="mailto:tanujha629@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg>
+          tanujha629@gmail.com
+        </a>
+        <a href="tel:+918287741797">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 3a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.2-1.3a2 2 0 0 1 2.1-.5c1 .3 2 .5 3 .7a2 2 0 0 1 1.7 2Z"/></svg>
+          +91 82877 41797
+        </a>
+        <a href="https://linkedin.com/in/tanu-jha" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9h4v12h-4zM10 13a4 4 0 0 1 8 0v8h-4v-8a2 2 0 0 0-4 0"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/tanu146" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>Designed &amp; built by Tanu Jha</p>
+    <p>New Delhi, India — updated 2026</p>
+  </footer>
+</section>
+
+<button class="totop" id="totop" aria-label="Back to top">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+/* =========================================================
+   ✏️  EDIT YOUR APPS HERE
+   Add real Play Store links, replace icon letters/colors with
+   real icon images if you like, and update the numbers once
+   you have live stats. Everything below (cards + phone mockup)
+   is generated from this array — no other edits needed.
+========================================================= */
+const apps = [
+  {
+    name: "Reflex Builder",
+    tagline: "Reaction Speed Training Game",
+    description:
+      "Developed and maintained the complete Flutter application from gameplay UI to Play Store release. Implemented Firebase backend, AdMob & Unity LevelPlay monetization, analytics, performance optimization, and delivered a game that has surpassed 10,000+ organic downloads.",
+    icon: "RB",
+    accent: "#4C7EFF",
+    accentSoft: "rgba(76,126,255,.12)",
+    downloads: "10K+",
+    downloadsLabel: "Downloads",
+    platform: "Google Play",
+    tech: ["Flutter", "Firebase", "AdMob", "Unity LevelPlay"],
+    url: "https://play.google.com/store/apps/details?id=com.cwm.reflexbuilder",
+    barPattern: [30, 55, 40, 70, 48, 62]
+  },
+
+  {
+    name: "TickleByte",
+    tagline: "Entertainment & Humor Platform",
+    description:
+      "Built and optimized the Flutter application with a scalable Firebase backend, delivering a smooth content browsing experience, push notifications, analytics integration, and a responsive UI focused on user engagement.",
+    icon: "TB",
+    accent: "#FF8A3D",
+    accentSoft: "rgba(255,138,61,.12)",
+    downloads: "Live",
+    downloadsLabel: "On Play Store",
+    platform: "Google Play",
+    tech: ["Flutter", "Firebase", "Push Notifications", "Analytics"],
+    url: "https://play.google.com/store/apps/details?id=com.cwmspvtltd.ticklebyte",
+    barPattern: [55, 38, 62, 48, 70, 45]
+  },
+
+  {
+    name: "DareDynasty",
+    tagline: "Truth or Dare Party Game",
+    description:
+      "Engineered the Flutter application featuring category-based gameplay, Firebase integration, premium content support, monetization, responsive UI, and Play Store deployment while ensuring smooth performance across Android devices.",
+    icon: "DD",
+    accent: "#A855F7",
+    accentSoft: "rgba(168,85,247,.12)",
+    downloads: "1K+",
+    downloadsLabel: "Downloads",
+    platform: "Google Play",
+    tech: ["Flutter", "Firebase", "In-App Purchases", "AdMob"],
+    url: "https://play.google.com/store/apps/details?id=com.cwmspvtltd.daredynasty",
+    barPattern: [40, 65, 45, 70, 55, 60]
+  },
+
+  {
+    name: "Tap Until Regret",
+    tagline: "Arcade Tapping Challenge",
+    description:
+      "Developed the Flutter game with responsive gameplay mechanics, Firebase integration, monetization SDKs, analytics tracking, and optimized rendering to deliver a fast and engaging mobile gaming experience.",
+    icon: "TR",
+    accent: "#34D9A0",
+    accentSoft: "rgba(52,217,160,.12)",
+    downloads: "Live",
+    downloadsLabel: "On Play Store",
+    platform: "Google Play",
+    tech: ["Flutter", "Firebase", "Analytics", "Monetization"],
+    url: "https://play.google.com/store/apps/details?id=com.cwm.tapuntilregret",
+    barPattern: [50, 34, 66, 44, 58, 38]
+  },
+
+  {
+    name: "Bubble Gem",
+    tagline: "Bubble Shooter Puzzle Game",
+    description:
+      "Designed and developed the Flutter application with polished animations, Firebase services, analytics, monetization, and performance optimizations, creating a smooth casual gaming experience ready for Play Store distribution.",
+    icon: "BG",
+    accent: "#00C2FF",
+    accentSoft: "rgba(0,194,255,.12)",
+    downloads: "Live",
+    downloadsLabel: "On Play Store",
+    platform: "Google Play",
+    tech: ["Flutter", "Firebase", "Analytics", "AdMob"],
+    url: "https://play.google.com/store/apps/details?id=com.cwm.bubblegem",
+    barPattern: [45, 60, 38, 68, 50, 58]
+  }
+];
+
+/* ---------- render app cards ---------- */
+const cardsHost = document.getElementById('appCards');
+cardsHost.innerHTML = apps.map((a) => `
+  <div class="app-card" style="--card-accent:${a.accent}; --card-glow:${a.accentSoft}">
+    <div class="app-card-top">
+      <div class="app-card-icon" style="background:${a.accent}">${a.icon}</div>
+      <div>
+        <h3>${a.name}</h3>
+        <div class="platform">${a.platform} · ${a.tagline}</div>
+      </div>
+    </div>
+    <p class="desc">${a.description}</p>
+    <div class="chips">${a.tech.map(t => `<span>${t}</span>`).join('')}</div>
+    <div class="app-card-foot">
+      <div class="app-card-stat">
+        <div class="v">${a.downloads}</div>
+        <div class="k">${a.downloadsLabel}</div>
+      </div>
+      <a class="app-card-link" href="${a.url}" target="_blank" rel="noopener">View on Play Store →</a>
+    </div>
+  </div>
+`).join('');
+
+/* ---------- render phone mockup slides ---------- */
+const phoneHost = document.getElementById('phoneScreen');
+phoneHost.innerHTML = apps.map((a, i) => `
+  <div class="app-slide ${i === 0 ? 'active' : ''}" data-i="${i}">
+    <div class="status"><span>9:41</span><span>●●● Google Play</span></div>
+    <div class="app-icon-big" style="background:${a.accent}">${a.icon}</div>
+    <h4>${a.name}</h4>
+    <div class="tag">${a.tagline}</div>
+    <div class="bars">${a.barPattern.map(h => `<i style="height:${h}%; background:${a.accent}"></i>`).join('')}</div>
+    <div class="app-chip-row">${a.tech.slice(0,3).map(t => `<span class="app-chip">${t}</span>`).join('')}</div>
+    <div class="metrics">
+      <div><div class="v">${a.downloads}</div><div class="k">${a.downloadsLabel}</div></div>
+      <div><div class="v">${a.platform}</div><div class="k">Platform</div></div>
+    </div>
+  </div>
+`).join('') + `<div class="phone-dots">${apps.map((_, i) => `<button data-i="${i}" class="${i===0?'active':''}"></button>`).join('')}</div>`;
+
+let currentSlide = 0;
+const slides = phoneHost.querySelectorAll('.app-slide');
+const dots = phoneHost.querySelectorAll('.phone-dots button');
+function showSlide(i){
+  slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+  dots.forEach((d,idx)=>d.classList.toggle('active', idx===i));
+  currentSlide = i;
+}
+dots.forEach(d => d.addEventListener('click', () => showSlide(parseInt(d.dataset.i))));
+if(apps.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  setInterval(() => showSlide((currentSlide + 1) % apps.length), 3800);
+}
+
+/* ---------- nav scroll state + mobile toggle ---------- */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+  document.getElementById('totop').classList.toggle('show', window.scrollY > 700);
+}, { passive: true });
+
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  navToggle.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  navToggle.classList.remove('open');
+  navLinks.classList.remove('open');
+}));
+
+document.getElementById('totop').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+/* ---------- scroll reveal ---------- */
+const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('is-visible');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+/* ---------- animated stat counters ---------- */
+const counters = document.querySelectorAll('.num[data-count]');
+const counterIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1400;
+    const start = performance.now();
+    function tick(now){
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target).toLocaleString() + suffix;
+      if(p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+    counterIO.unobserve(el);
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => counterIO.observe(c));
+</script>
+</body>
+</html>
